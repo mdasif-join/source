@@ -16,17 +16,18 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 
 import ReusableSkeleton from "./skeleton";
 
+import DataNotFound from "@/app/components/data-not-found";
+import Loading from "@/app/loading";
 import {ChevronDownIcon} from "@/assets/icons/chevron-down-icon";
 import {SearchIcon} from "@/assets/icons/search-icon";
 import {ETable} from "@/enums/tableMode";
 import {IColumn, TSearchable} from "@/types/table";
 import {capitalize} from "@/utils/capitalize";
-import Loading from "@/app/loading";
 
 export default function ThroughoutTable({
   INITIAL_VISIBLE_COLUMNS,
@@ -42,7 +43,23 @@ export default function ThroughoutTable({
   PAGE_ID,
   HANDLE_SELECTED,
   DATA_LOADING,
-}: any) {
+  SELECTION_BEHAVIOR,
+}: {
+  INITIAL_VISIBLE_COLUMNS: string[];
+  columns: IColumn[];
+  fetchData: any[];
+  statusOptions?: any;
+  sortableColumn?: any;
+  useRenderCell: any;
+  CUSTOM_BUTTON?: any;
+  SELECTION_BEHAVIOR?: any;
+  SELECTION_MODE?: ETable;
+  TITLE?: string;
+  PAGINATION?: any;
+  PAGE_ID?: any;
+  HANDLE_SELECTED?: any;
+  DATA_LOADING?: boolean;
+}) {
   const renderCell = useRenderCell();
   const [isLoading, setIsLoading] = React.useState(true);
   const [filterValue, setFilterValue] = React.useState("");
@@ -100,8 +117,12 @@ export default function ThroughoutTable({
     return columns.filter((column: IColumn) => Array.from(visibleColumns).includes(column.uid));
   }, [visibleColumns]);
 
+  const sortedFetchData = React.useMemo(() => {
+    return [...fetchData].sort((a: any, b: any) => a.serialNumber - b.serialNumber);
+  }, [fetchData]);
+
   const filteredItems = React.useMemo(() => {
-    let filteredData = [...fetchData];
+    let filteredData = [...sortedFetchData];
 
     if (hasSearchFilter) {
       filteredData = filteredData.filter((data) =>
@@ -116,7 +137,7 @@ export default function ThroughoutTable({
     }
 
     return filteredData;
-  }, [fetchData, filterValue, statusFilter]);
+  }, [sortedFetchData, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -142,6 +163,7 @@ export default function ThroughoutTable({
   const onSearchChange = React.useCallback((value?: string) => {
     if (value) {
       setFilterValue(value);
+      setPage(1); // Navigate to the first page when searching
     } else {
       setFilterValue("");
     }
@@ -167,7 +189,7 @@ export default function ThroughoutTable({
           <div className="flex flex-wrap gap-3">
             {statusOptions && (
               <Dropdown>
-                <DropdownTrigger className="sm:flex hidden">
+                <DropdownTrigger className="hidden sm:flex">
                   <Button
                     endContent={<ChevronDownIcon className="text-small" />}
                     size="sm"
@@ -194,7 +216,7 @@ export default function ThroughoutTable({
               </Dropdown>
             )}
             <Dropdown>
-              <DropdownTrigger className="sm:flex hidden">
+              <DropdownTrigger className="hidden sm:flex">
                 <Button
                   endContent={<ChevronDownIcon className="text-small" />}
                   size="sm"
@@ -222,16 +244,16 @@ export default function ThroughoutTable({
           </div>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <span className="text-dark dark:text-light text-small">
+          <span className="text-small text-dark dark:text-light">
             Total {PAGINATION ? PAGINATION.total : fetchData.length} items
           </span>
-          <span className="text-primary dark:text-foreground text-md font-semibold capitalize">
+          <span className="text-md font-semibold capitalize text-primary dark:text-foreground">
             {TITLE ?? ""}
           </span>
-          <label className="text-dark dark:text-light text-small flex items-center">
+          <label className="flex items-center text-small text-dark dark:text-light">
             Rows per page:
             <select
-              className="text-dark dark:text-light text-small bg-transparent outline-none"
+              className="bg-transparent text-small text-dark outline-none dark:text-light"
               onChange={onRowsPerPageChange}
             >
               <option value="10">10</option>
@@ -239,6 +261,9 @@ export default function ThroughoutTable({
               <option value="20">20</option>
               <option value="25">25</option>
               <option value="30">30</option>
+              <option value="50">50</option>
+              <option value="70">70</option>
+              <option value="100">100</option>
             </select>
           </label>
         </div>
@@ -256,6 +281,9 @@ export default function ThroughoutTable({
   ]);
 
   const bottomContent = React.useMemo(() => {
+    const totalItems = hasSearchFilter ? filteredItems.length : fetchData.length;
+    const totalPages = handlePages(totalItems);
+
     return (
       <div className="flex items-center justify-between px-2 py-2">
         <Pagination
@@ -264,9 +292,9 @@ export default function ThroughoutTable({
             cursor: "bg-primary dark:bg-foreground/70 text-light",
           }}
           color="default"
-          isDisabled={hasSearchFilter}
+          isDisabled={hasSearchFilter && totalItems <= 10} // Enable pagination if search results exceed 10 items
           page={PAGINATION ? PAGINATION.current_page : page}
-          total={PAGINATION ? PAGINATION.last_page : handlePages(fetchData.length)}
+          total={PAGINATION ? PAGINATION.last_page : totalPages}
           variant="light"
           onChange={
             PAGINATION
@@ -277,11 +305,13 @@ export default function ThroughoutTable({
               : setPage
           }
         />
-        <span className="text-small text-dark dark:text-light">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${items.length} selected`}
-        </span>
+        {SELECTION_MODE === ETable.multiple && (
+          <span className="text-small text-dark dark:text-light">
+            {selectedKeys === "all"
+              ? "All items selected"
+              : `${selectedKeys.size} of ${items.length} selected`}
+          </span>
+        )}
       </div>
     );
   }, [
@@ -289,10 +319,11 @@ export default function ThroughoutTable({
     selectedKeys,
     items.length,
     page,
-    handlePages(fetchData.length),
+    handlePages,
     PAGINATION,
     PAGINATION?.current_page,
     hasSearchFilter,
+    filteredItems.length,
   ]);
 
   const classNames = React.useMemo(
@@ -328,6 +359,7 @@ export default function ThroughoutTable({
             wrapper: "after:bg-foreground after:text-background text-background",
           },
         }}
+        selectionBehavior={SELECTION_BEHAVIOR ?? "toggle"}
         classNames={classNames}
         selectedKeys={selectedKeys}
         selectionMode={SELECTION_MODE ?? ETable.none}
@@ -339,11 +371,7 @@ export default function ThroughoutTable({
       >
         <TableHeader columns={headerColumns}>
           {(column: IColumn) => (
-            <TableColumn
-              key={column.uid}
-              align={column.uid === "actions" ? "center" : "start"}
-              allowsSorting={column.sortable}
-            >
+            <TableColumn key={column.uid} allowsSorting={column.sortable}>
               {column.name}
             </TableColumn>
           )}
@@ -353,7 +381,7 @@ export default function ThroughoutTable({
             (DATA_LOADING && <ReusableSkeleton numberOfSkeletons={10} />) || isLoading ? (
               <ReusableSkeleton numberOfSkeletons={10} />
             ) : (
-              "No Data Found"
+              <DataNotFound />
             )
           }
           isLoading={DATA_LOADING || isLoading}
@@ -361,12 +389,17 @@ export default function ThroughoutTable({
           items={sortedItems}
         >
           {sortedItems.map((item: any, index: number) => {
+            const isLastRow = index === sortedItems.length - 1;
             return (
               <TableRow key={index}>
                 {(columnKey) => {
-                  const sl = parseInt(`${page - 1}${index}`);
+                  const sl = (page - 1) * rowsPerPage + index;
                   return (
-                    <TableCell className="text-dark dark:text-light overflow-auto font-medium">
+                    <TableCell
+                      // if need border on table
+                      // className={`overflow-auto border-b border-gray-300 font-medium text-dark dark:text-light ${isLastRow ? "border-b-0" : ""}`}
+                      className={`overflow-auto border-gray-300 font-medium text-dark dark:text-light`}
+                    >
                       {renderCell(item, columnKey, sl)}
                     </TableCell>
                   );
