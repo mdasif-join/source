@@ -1,38 +1,12 @@
 # Frontend Linting & Formatting Guide
 
-This document provides a **modular ESLint + Prettier + TailwindCSS setup** for all frontend projects. You can enable or disable parts depending on your framework: **React, Vue, Angular, Next.js, or vanilla JS/TS**.
-
----
-
 ## 1. Install Dependencies
 
-### Base Dependencies (All Projects)
+### Base Dependencies
 
 ```bash
-pnpm add -D eslint prettier prettier-plugin-tailwindcss eslint-plugin-tailwindcss
+npm install -D eslint prettier prettier-plugin-tailwindcss eslint-plugin-tailwindcss
 ```
-
-### TypeScript Projects
-
-```bash
-pnpm add -D @typescript-eslint/eslint-plugin @typescript-eslint/parser
-```
-
-### React / Next.js Projects
-
-```bash
-pnpm add -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-jsx-a11y
-```
-
-### Vue Projects
-
-```bash
-pnpm add -D eslint-plugin-vue
-```
-
-### Angular / Vanilla JS/TS Projects
-
-* No extra framework packages needed beyond **ESLint, Prettier, Tailwind, TypeScript (optional)**.
 
 ---
 
@@ -44,11 +18,11 @@ Add the following scripts to your `package.json`:
 {
   "scripts": {
     "ts:check": "tsc --noEmit && echo 'TypeScript check passed'",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.vue",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.vue --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,vue,json,css,scss,md}\"",
-    "check:all": "pnpm ts:check && pnpm lint",
-    "fix:all": "pnpm lint:fix && pnpm format"
+    "check:all": "npm run ts:check && npm run lint",
+    "fix:all": "npm run lint:fix && npm run format",
   }
 }
 ```
@@ -140,16 +114,3 @@ export default [
 | `pnpm format`    | Format code using Prettier    |
 | `pnpm check:all` | Run TypeScript + ESLint check |
 | `pnpm fix:all`   | ESLint fix + Prettier format  |
-
----
-
-## 6. Framework-Specific Reference Table
-
-| Project Type         | Required Packages                                                                                                                                                                                                               | ESLint Plugins                                                | ESLint Rules / Sections                                                               | Notes                                    |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ---------------------------------------- |
-| React / Next.js      | `eslint`, `prettier`, `prettier-plugin-tailwindcss`, `eslint-plugin-tailwindcss`, `@typescript-eslint/eslint-plugin`, `@typescript-eslint/parser`, `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-jsx-a11y` | react, react-hooks, jsx-a11y, tailwindcss, @typescript-eslint | Enable React rules section. Keep Tailwind and TS rules.                               | Remove Vue section.                      |
-| Vue.js               | `eslint`, `prettier`, `prettier-plugin-tailwindcss`, `eslint-plugin-tailwindcss`, `@typescript-eslint/eslint-plugin`, `@typescript-eslint/parser`, `eslint-plugin-vue`                                                          | vue, tailwindcss, @typescript-eslint                          | Enable Vue section. Keep Tailwind and TS rules. Disable React rules.                  | Remove React + React Hooks section.      |
-| Angular / Vanilla TS | `eslint`, `prettier`, `prettier-plugin-tailwindcss`, `eslint-plugin-tailwindcss`, `@typescript-eslint/eslint-plugin`, `@typescript-eslint/parser`                                                                               | tailwindcss, @typescript-eslint                               | Keep TypeScript rules section. Keep Tailwind if used. Disable React and Vue sections. | No React or Vue rules required.          |
-| Vanilla JS (No TS)   | `eslint`, `prettier`, `prettier-plugin-tailwindcss`, `eslint-plugin-tailwindcss`                                                                                                                                                | tailwindcss                                                   | Keep base JS rules. Tailwind optional. Disable TS, React, Vue sections.               | TypeScript plugins not needed.           |
-| Tailwind Usage       | `prettier-plugin-tailwindcss`, `eslint-plugin-tailwindcss`                                                                                                                                                                      | tailwindcss                                                   | Keep Tailwind section enabled.                                                        | Optional in projects not using Tailwind. |
-
