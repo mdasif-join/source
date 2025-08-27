@@ -1,3 +1,8 @@
+/* 
+- Install Dependencies
+pnpm add -D eslint prettier prettier-plugin-tailwindcss eslint-plugin-tailwindcss @typescript-eslint/eslint-plugin @typescript-eslint/parser
+*/
+
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
@@ -5,13 +10,12 @@ import { FlatCompat } from "@eslint/eslintrc";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// FlatCompat allows using old-style ESLint configs (like Next.js) with Flat Config
+// flatCompat allows using old-style ESLint configs (like Next.js) with Flat Config
 const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
 export default [
-  // Next.js recommended configs
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 
   // TailwindCSS plugin rules
