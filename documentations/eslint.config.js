@@ -1,21 +1,19 @@
-/* 
-- Install Dependencies
-pnpm add -D eslint prettier prettier-plugin-tailwindcss eslint-plugin-tailwindcss @typescript-eslint/eslint-plugin @typescript-eslint/parser
-- Add the following scripts to your package.json
-{
-  "scripts": {
-    "ts:check": "tsc --noEmit && echo 'TypeScript check passed'",
+// - Install Dependencies
+// pnpm add -D eslint prettier prettier-plugin-tailwindcss eslint-plugin-tailwindcss @typescript-eslint/eslint-plugin @typescript-eslint/parser
+// - Add the following scripts to your package.json
+// {
+//   "scripts": {
+//     "ts:check": "tsc --noEmit && echo 'TypeScript check passed'",
 
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+//     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+//     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
 
-    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
+//     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
 
-    "check:all": "pnpm ts:check && pnpm lint",
-    "fix:all": "pnpm lint:fix && pnpm format"
-  }
-}
-*/
+//     "check:all": "pnpm ts:check && pnpm lint",
+//     "fix:all": "pnpm lint:fix && pnpm format"
+//   }
+// }
 
 import { dirname } from "path";
 import { fileURLToPath } from "url";
