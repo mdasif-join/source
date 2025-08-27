@@ -61,60 +61,54 @@ Add the following scripts to your `package.json`:
 
 ```js
 import { FlatCompat } from "@eslint/eslintrc";
+import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
+import reactPlugin from "eslint-plugin-react";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
+import tailwindcssPlugin from "eslint-plugin-tailwindcss";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const compat = new FlatCompat({ baseDirectory: __dirname });
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+  recommendedConfig: "eslint:recommended",
+});
 
 export default [
-  // Base rules for JavaScript/TypeScript
-  ...compat.extends("eslint:recommended", "plugin:@typescript-eslint/recommended"),
+  ...compat.extends("plugin:@typescript-eslint/recommended"),
 
-  // React support
-  // Enable only if using React/Next.js
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
+    files: ["**/*.{js,ts,jsx,tsx}"],
     plugins: {
-      react: require("eslint-plugin-react"),
-      "react-hooks": require("eslint-plugin-react-hooks"),
-      "jsx-a11y": require("eslint-plugin-jsx-a11y")
+      react: reactPlugin,
+      "react-hooks": reactHooksPlugin,
+      "jsx-a11y": jsxA11yPlugin,
     },
     rules: {
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-      "react/prop-types": "off"
+      "react/prop-types": "off",
     },
-    settings: { react: { version: "detect" } }
+    settings: { react: { version: "detect" } },
   },
 
-  // Vue support
-  // Enable only if using Vue
   {
-    files: ["**/*.vue"],
-    plugins: { vue: require("eslint-plugin-vue") },
-    rules: {}
-  },
-
-  // TailwindCSS rules
-  {
-    files: ["**/*.{js,ts,jsx,tsx,vue}"],
-    plugins: { tailwindcss: require("eslint-plugin-tailwindcss") },
+    files: ["**/*.{js,ts,jsx,tsx}"],
+    plugins: { tailwindcss: tailwindcssPlugin },
     rules: {
       "tailwindcss/classnames-order": "warn",
       "tailwindcss/enforces-shorthand": "warn",
-      "tailwindcss/no-custom-classname": "off"
+      "tailwindcss/no-custom-classname": "off",
     },
-    settings: { tailwindcss: { callees: ["classnames", "clsx", "ctl"] } }
+    settings: { tailwindcss: { callees: ["classnames", "clsx", "ctl"] } },
   },
 
-  // Ignore unnecessary files/folders
-  {
-    ignores: ["node_modules/**", "dist/**", "build/**"]
-  }
+  { ignores: ["node_modules/**", ".next/**", "dist/**", "build/**"] },
 ];
+
 ```
 
 > Comment or remove framework sections not used in your project.
