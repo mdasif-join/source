@@ -1,13 +1,18 @@
 /* 
 - Install Dependencies
 pnpm add -D eslint prettier prettier-plugin-tailwindcss eslint-plugin-tailwindcss @typescript-eslint/eslint-plugin @typescript-eslint/parser
-- Scripts add to your package.json
+- Add the following scripts to your package.json
 {
   "scripts": {
+    "ts:check": "tsc --noEmit && echo 'TypeScript check passed'",
+
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "prettier --write .",
-    "fix:all": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write ."
+
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
+
+    "check:all": "pnpm ts:check && pnpm lint",
+    "fix:all": "pnpm lint:fix && pnpm format"
   }
 }
 */
