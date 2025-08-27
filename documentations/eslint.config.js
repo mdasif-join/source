@@ -4,12 +4,12 @@
 // - Add the following scripts to your package.json
 // {
 //   "scripts": {
-//     "ts:check": "tsc --noEmit && echo 'TypeScript check passed'",
-//     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-//     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-//     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
-//     "check:all": "pnpm ts:check && pnpm lint",
-//     "fix:all": "pnpm lint:fix && pnpm format"
+//    "ts:check": "tsc --noEmit && echo 'TypeScript check passed'",
+//    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+//    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+//    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
+//    "check:all": "npm run ts:check && npm run lint",
+//    "fix:all": "npm run lint:fix && npm run format",
 //   }
 // }
 
