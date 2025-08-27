@@ -5,7 +5,7 @@
 ### Base Dependencies
 
 ```bash
-npm install -D eslint prettier prettier-plugin-tailwindcss eslint-plugin-tailwindcss
+npm install -D eslint prettier prettier-plugin-tailwindcss eslint-plugin-tailwindcss @eslint/eslintrc @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-react-hooks
 ```
 
 ---
