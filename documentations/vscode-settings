@@ -1,0 +1,98 @@
+{
+  //* for better coding experience
+  "editor.fontFamily": "JetBrains Mono",
+  "editor.fontSize": 16,
+  "editor.fontLigatures": true,
+  "editor.cursorBlinking": "expand",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.mouseWheelZoom": true,
+  "editor.minimap.enabled": false, // disable minimap for less distraction
+  "editor.wordWrap": "on", // wrap long lines automatically
+  "editor.formatOnSave": true, // auto format on save
+  "editor.formatOnPaste": true, // auto format when pasting
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll.eslint": "always" // auto-fix ESLint issues on save
+  },
+  "breadcrumbs.enabled": true, // show file path at top
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "One Dark Pro Night Flat",
+  "workbench.editor.empty.hint": "hidden",
+  "workbench.startupEditor": "none", // open without welcome page
+  "explorer.compactFolders": false, // show full folder hierarchy
+  "files.autoSave": "onFocusChange", // auto-save when switching window
+
+  //* for git integration & version control
+  "git.enableSmartCommit": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.pullBeforeCheckout": true, // avoid conflicts
+
+  //* set default terminal to Git Bash
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+
+  //* for tailwindcss intellisense & autocomplete
+  "tailwindCSS.includeLanguages": {
+    "typescriptreact": "html",
+    "javascriptreact": "html"
+  },
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.classRegex": [
+    ["clsx\\(([^)]*)\\)", "'([^']*)'"],
+    ["classnames\\(([^)]*)\\)", "'([^']*)'"]
+  ], //* enable tailwind in clsx/classnames
+
+  //* prettier settings
+  "prettier.requireConfig": true, // only format if prettier config is present in project
+  "prettier.arrowParens": "always",
+  "prettier.endOfLine": "auto",
+  "prettier.singleQuote": false,
+  "prettier.semi": true,
+  "prettier.trailingComma": "es5",
+  "prettier.tabWidth": 2,
+  "prettier.printWidth": 100,
+
+  //* set default formatter for different file types
+  "[typescript]": {
+   "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[cpp]": { "editor.defaultFormatter": "ms-vscode.cpptools" },
+
+  //* for github copilot AI code suggestions
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false,
+    "c": false,
+    "typescriptreact": true,
+    "cpp": true,
+    "typescript": true,
+    "css": true
+  },
+  "github.copilot.nextEditSuggestions.enabled": true,
+
+  //* for better comments in code
+  "better-comments.tags": [
+    { "tag": "!", "color": "#FF2D00" },
+    { "tag": "?", "color": "#3498DB" },
+    { "tag": "//", "color": "#474747", "strikethrough": true },
+    { "tag": "todo", "color": "#FF8C00" },
+    { "tag": "*", "color": "#98C379" }
+  ],
+
+  //* for previewing markdown files & adding custom words to spell checker
+  "workbench.editorAssociations": { "*.md": "vscode.markdown.preview.editor" },
+  "cSpell.userWords": [
+    "VITE",
+    "Nextjs",
+    "Tailwindcss"
+  ],
+  "typescript.updateImportsOnFileMove.enabled": "always"
+}
